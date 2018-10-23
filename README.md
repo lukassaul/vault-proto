@@ -22,11 +22,24 @@ Block time is 30 seconds.
 
 For prototype the genesis block is kept as the litecoin block.  
 
-If asked to mine, vault-proto looks for the key as set with rpc call setminingkey [privkey]
 
-To create N units in the next coinbase, use rpccall setissuenextblock [amount]   
+New RPC Calls
+----------------
+
+Two new RPC calls area added for keyed miningg operation:  
+
+If asked to mine with rpc call "setgenerate true", 
+vault-proto looks for the key as set with rpc call setminingkey [privkey].  If no valid key is present, mining will continue but no block will ever be found.  
+
+To create N units in the next coinbase, use rpccall setissuenextblock [amount]   No limit to issuance in this version, but all events are public and visible on the block chain.  
 
 Current status:  Demo in progress
+
+
+Fees
+----------------
+
+Fees are set to 0.1% of each transaction.  Miners get the fees as usual, but now miners must have a key to produce a block, so keyed miners collect all fees.  
 
 
 
