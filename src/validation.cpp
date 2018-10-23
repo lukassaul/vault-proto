@@ -1143,16 +1143,19 @@ bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex, const Consensus
 }
 
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
-{
-    int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
-    // Force block reward to zero when right shift is undefined.
-    if (halvings >= 64)
-        return 0;
+{        
+    //int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
+    
+    // No halvings for Vault
 
-    CAmount nSubsidy = 50 * COIN;
-    // Subsidy is cut in half every 210,000 blocks which will occur approximately every 4 years.
-    nSubsidy >>= halvings;
+    CAmount nSubsidy = 1;
+
+    // update with RPC call to global variable here.
+    // default will be zero (almost all blocks have zero coinbase, or 1 sat depending)
+    //  0.0000 0001 USD per block  big money big prizes
+
     return nSubsidy;
+
 }
 
 bool IsInitialBlockDownload()
@@ -2994,6 +2997,8 @@ bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::P
 
     if (block.fChecked)
         return true;
+
+    if (!sigCheck())  return false;  // VAULT.ch addition of keyed mining here, implement please
 
     // Check that the header is valid (particularly PoW).  This is mostly
     // redundant with the call in AcceptBlockHeader.
